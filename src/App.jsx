@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { Contato } from './components/Contato'
 import { v4 as uuid } from 'uuid'
 
@@ -13,6 +13,9 @@ export function App() {
     return []
   })
 
+  const inputNome = useRef()
+  const inputTelefone = useRef()
+
   function definirNome(e) {
     setContato({ ...contato, nome: e.target.value })
   }
@@ -22,8 +25,19 @@ export function App() {
   }
 
   function adicionarContato() {
-    if (contato.nome !== '' && contato.telefone.length >= 9) {
-      setListaContatos([...listaContatos, contato])
+    let duplicado = listaContatos.find(
+      valueExiste =>
+        valueExiste.nome === contato.nome &&
+        valueExiste.telefone === contato.telefone
+    )
+    if (duplicado === undefined) {
+      if (contato.nome !== '' && contato.telefone.length >= 9) {
+        setListaContatos([...listaContatos, contato])
+      }
+      setContato({ nome: '', telefone: '' })
+      inputNome.current.focus()
+    } else {
+      inputTelefone.current.focus()
     }
   }
 
@@ -34,13 +48,19 @@ export function App() {
       <div>
         <label>Nome: </label>
         <br />
-        <input type="text" onChange={definirNome} value={contato.nome} />
+        <input
+          type="text"
+          ref={inputNome}
+          onChange={definirNome}
+          value={contato.nome}
+        />
       </div>
       <div>
         <label>Telefone: </label>
         <br />
         <input
           type="number"
+          ref={inputTelefone}
           onChange={definirTelefone}
           value={contato.telefone}
         />
@@ -48,7 +68,6 @@ export function App() {
       <br />
       <button onClick={adicionarContato}>Adicionar Contato</button>
       <hr />
-      {/* <ListaContatos listaContatos={listaContatos} /> */}
       {listaContatos.map(contato => {
         return (
           <Contato
