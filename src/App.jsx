@@ -41,6 +41,12 @@ export function App() {
     }
   }
 
+  function enterAdicionarContato(e) {
+    if (e.code === 'Enter' || e.code === 'NumpadEnter') {
+      adicionarContato()
+    }
+  }
+
   return (
     <>
       <h1>Minha lista de contactos</h1>
@@ -61,6 +67,7 @@ export function App() {
         <input
           type="number"
           ref={inputTelefone}
+          onKeyUp={enterAdicionarContato}
           onChange={definirTelefone}
           value={contato.telefone}
         />
