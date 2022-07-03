@@ -57,6 +57,17 @@ export function App() {
     localStorage.setItem('meus_contatos', JSON.stringify(listaContatos))
   }, [listaContatos])
 
+  function limparStorage() {
+    setListaContatos([])
+  }
+
+  function removerContato(id) {
+    const novaLista = listaContatos.filter(
+      contato => contato.nome !== id.nome && contato.telefone !== id.telefone
+    )
+    setListaContatos(novaLista)
+  }
+
   return (
     <>
       <h1>Minha lista de contactos</h1>
@@ -84,6 +95,7 @@ export function App() {
       </div>
       <br />
       <button onClick={adicionarContato}>Adicionar Contato</button>
+      <button onClick={limparStorage}>Limpar lista</button>
       <hr />
       {listaContatos.map(contato => {
         return (
@@ -91,6 +103,7 @@ export function App() {
             key={uuid()}
             nome={contato.nome}
             telefone={contato.telefone}
+            remover={removerContato}
           />
         )
       })}
