@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Contato } from './components/Contato'
 import { v4 as uuid } from 'uuid'
 
@@ -46,6 +46,16 @@ export function App() {
       adicionarContato()
     }
   }
+
+  useEffect(() => {
+    if (localStorage.getItem('meus_contatos') !== null) {
+      setListaContatos(JSON.parse(localStorage.getItem('meus_contatos')))
+    }
+  }, [])
+
+  useEffect(() => {
+    localStorage.setItem('meus_contatos', JSON.stringify(listaContatos))
+  }, [listaContatos])
 
   return (
     <>
